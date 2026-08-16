@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Book Stats (Private)</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .stats-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    .stats-table th, .stats-table td {
+      text-align: left;
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .stats-table th {
+      background: var(--bg);
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Book Stats</h1>
+    <p>Private view — click counts per book. Not linked from the main site.</p>
+  </header>
+
+  <div class="scroll-area">
+    <main>
+      <table class="stats-table" id="stats-table">
+        <thead>
+          <tr><th>Book</th><th>Reads (clicks)</th></tr>
+        </thead>
+        <tbody id="stats-body"></tbody>
+      </table>
+    </main>
+  </div>
+
+  <script src="books.js"></script>
+  <script>
+    const COUNTER_NAMESPACE = "ramesh-ramathota-book-store";
+
+    function slugify(title) {
+      return title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+    }
+
+    const tbody = document.getElementById("stats-body");
+    BOOKS.forEach((book) => {
+      const key = slugify(book.title);
+      const row = document.createElement("tr");
+      row.innerHTML = `<td>${book.title}</td><td id="count-${key}">Loading…</td>`;
+      tbody.appendChild(row);
+
+      fetch(`https://api.countapi.xyz/get/${COUNTER_NAMESPACE}/${key}`)
+        .then((res) => res.json())
+        .then((data) => {
+          document.getElementById(`count-${key}`).textContent = data.value || 0;
+        })
+        .catch(() => {
+          document.getElementById(`count-${key}`).textContent = "N/A";
+        });
+    });
+  </script>
+</body>
+</html>
