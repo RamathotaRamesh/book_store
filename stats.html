@@ -30,7 +30,7 @@
 <body>
   <header>
     <h1>Book Stats</h1>
-    <p>Private view — click counts per book. Not linked from the main site.</p>
+    <p>Private view — click counts per book. Not linked from the main site. Note: loading this page also counts as +1 per book, since checking the count uses the same service as tracking it.</p>
   </header>
 
   <div class="scroll-area">
@@ -47,6 +47,7 @@
   <script src="books.js"></script>
   <script>
     const COUNTER_NAMESPACE = "ramesh-ramathota-book-store";
+    const COUNTER_BASE = "https://visitor-badge.laobi.icu/badge";
 
     function slugify(title) {
       return title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
@@ -59,10 +60,12 @@
       row.innerHTML = `<td>${book.title}</td><td id="count-${key}">Loading…</td>`;
       tbody.appendChild(row);
 
-      fetch(`https://api.countapi.xyz/get/${COUNTER_NAMESPACE}/${key}`)
-        .then((res) => res.json())
-        .then((data) => {
-          document.getElementById(`count-${key}`).textContent = data.value || 0;
+      fetch(`${COUNTER_BASE}?page_id=${COUNTER_NAMESPACE}.${key}`)
+        .then((res) => res.text())
+        .then((svg) => {
+          const numbers = [...svg.matchAll(/>(\d+)<\/text>/g)].map((m) => m[1]);
+          const value = numbers.length ? numbers[numbers.length - 1] : "N/A";
+          document.getElementById(`count-${key}`).textContent = value;
         })
         .catch(() => {
           document.getElementById(`count-${key}`).textContent = "N/A";

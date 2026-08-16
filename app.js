@@ -1,4 +1,5 @@
 const COUNTER_NAMESPACE = "ramesh-ramathota-book-store";
+const COUNTER_BASE = "https://visitor-badge.laobi.icu/badge";
 
 function slugify(title) {
   return title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
@@ -31,7 +32,8 @@ function attachClickTracking() {
   document.querySelectorAll(".book-link").forEach((link) => {
     link.addEventListener("click", () => {
       const key = link.dataset.book;
-      fetch(`https://api.countapi.xyz/hit/${COUNTER_NAMESPACE}/${key}`).catch(() => {});
+      const pixel = new Image();
+      pixel.src = `${COUNTER_BASE}?page_id=${COUNTER_NAMESPACE}.${key}`;
     });
   });
 }
