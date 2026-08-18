@@ -12,8 +12,8 @@ const BOOKS = [
   // {
   //   title: "Ram and Sita",
   //   author: "Ramesh Ramathota",
-  //   cover: "assets/ram_sita.png",
+  //   cover: "assets/ram_sita_cover.png",
   //   description: "A novel of love, hope, and letting go — a love that became a memory.",
-  //   driveLink: "https://drive.google.com/file/d/1ONKWWB5Xlrij82FQDN4OXZlZdEZLBz_W/view?usp=sharing",
+  //   driveLink: "https://drive.google.com/file/d/1YpR184Xq-J-C846bsZBRnVW5pMA79qMu/view?usp=sharing",
   // },
 ];
